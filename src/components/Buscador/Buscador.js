@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getMovies, addMovieFavorite } from "../../actions";
-import { Link } from "react-router-dom";
+
 import "./Buscador.css";
+import MovieCard from "./MovieCard";
 
 export class Buscador extends Component {
   constructor(props) {
@@ -22,46 +23,38 @@ export class Buscador extends Component {
   render() {
     const { title } = this.state;
     return (
-      <div>
-        <h2>Buscador</h2>
+      <div className="searchCont">
+        <h1>Movie Searcher</h1>
         <form className="form-container" onSubmit={(e) => this.handleSubmit(e)}>
           <div>
-            <label className="label" htmlFor="title">
-              Película:{" "}
-            </label>
             <input
               type="text"
               id="title"
               autoComplete="off"
               value={title}
               onChange={(e) => this.handleChange(e)}
+              placeholder="Amazing movie..."
             />
           </div>
-          <button type="submit">BUSCAR</button>
+          <button type="submit">Search</button>
         </form>
-        <ul>
+        <div className="moviesSection">
           {this.props.movies ? (
             this.props.movies.map((movie) => {
               return (
-                <li key={movie.imdbID}>
-                  <Link to={`/movie/${movie.imdbID}`}>{movie.Title}</Link>
-                  <button
-                    onClick={() =>
-                      this.props.addMovieFavorite({
-                        title: movie.Title,
-                        id: movie.imdbID,
-                      })
-                    }
-                  >
-                    Fav
-                  </button>
-                </li>
+                <MovieCard
+                  id={movie.imdbID}
+                  key={movie.imdbID}
+                  title={movie.Title}
+                  poster={movie.Poster}
+                  year={movie.Year}
+                ></MovieCard>
               );
             })
           ) : (
             <p>No se han encontrado resultados</p>
           )}
-        </ul>
+        </div>
       </div>
     );
   }
